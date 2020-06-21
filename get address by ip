@@ -1,0 +1,52 @@
+"""
+use bs4 and requests to get ip from ip38.com
+liushui @2020616
+"""
+from bs4 import BeautifulSoup
+import requests
+import re
+import xlwt
+
+def geturl(ip):   #由ip返回url
+    url = "https://www.ip38.com/ip.php?ip={}".format(ip)
+    return url
+
+def webtext(url):  #由url返回响应包
+    rurl = requests.get(url)
+    data = rurl.text
+    return data
+
+def getaddress(webdata):  #使用bs4处理响应包,将ip和归属地返回到一个临时列表里
+    soup = BeautifulSoup(webdata,'html.parser')
+    alist = soup.find_all('font',color='#FF0000')[-2:]
+    a = alist[0].string
+    b = alist[1].string
+    return [a,b]    
+
+def listget(list1,list2,list3):#将列表3里得数据分别填充到列表1和2里
+    list1.append(list3[0])
+    list2.append(list3[1])
+
+def file(iplist,addlist):#将列表里得数据填写到文件里
+    book = xlwt.Workbook(encoding='utf-8')
+    sheet = book.add_sheet('address')
+    for i in range(0,len(iplist)):
+        sheet.write(i,0,iplist[i])
+        sheet.write(i,1,addlist[i])
+    book.save('IpAndADD.xls') 
+    
+#main
+iplist = []
+addlist = []
+
+print ("=================程序开始===========")
+txt = open('ip.txt')
+for ips in txt.readlines():
+    ip = ips.strip()   #去除空格换行
+    url = geturl(ip)
+    data = webtext(url)
+    addres = getaddress(data)
+    listget(iplist,addlist,addres)
+    print (addres)
+file (iplist,addlist)
+print ("===============程序结束=============")
