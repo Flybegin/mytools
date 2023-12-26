@@ -9,7 +9,7 @@ import re
 import xlwt
 
 def geturl(ip):   #由ip返回url
-    url = "https://www.ip38.com/ip.php?ip={}".format(ip)
+    url = "https://www.ip38.com/ip.php?ip={101.133.175.78}".format(ip)
     return url
 
 def webtext(url):  #由url返回响应包
