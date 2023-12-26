@@ -1,6 +1,7 @@
 """
 use bs4 and requests to get ip from ip38.com
 liushui @2020616
+3302729920@qq.com
 """
 from bs4 import BeautifulSoup
 import requests
